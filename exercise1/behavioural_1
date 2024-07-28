@@ -1,0 +1,52 @@
+# Observer Pattern
+
+class WeatherForecast:
+    def __init__(self):
+        self.observers = []
+        self.temperature = 0
+        self.humidity = 0
+        self.wind_speed = 0
+
+    def register_observer(self, observer):
+        self.observers.append(observer)
+
+    def remove_observer(self, observer):
+        self.observers.remove(observer)
+
+    def notify_observers(self):
+        for observer in self.observers:
+            observer.update(self.temperature, self.humidity, self.wind_speed)
+
+    def update_data(self, temperature, humidity, wind_speed):
+        self.temperature = temperature
+        self.humidity = humidity
+        self.wind_speed = wind_speed
+        self.notify_observers()
+
+class TemperatureDisplay:
+    def update(self, temperature, humidity, wind_speed):
+        print(f"Temperature: {temperature}°C")
+
+class HumidityDisplay:
+    def update(self, temperature, humidity, wind_speed):
+        print(f"Humidity: {humidity}%")
+
+class WindSpeedDisplay:
+    def update(self, temperature, humidity, wind_speed):
+        print(f"Wind Speed: {wind_speed} km/h")
+
+# Create weather forecast system
+weather_forecast = WeatherForecast()
+
+# Create display devices
+temperature_display = TemperatureDisplay()
+humidity_display = HumidityDisplay()
+wind_speed_display = WindSpeedDisplay()
+
+# Register display devices as observers
+weather_forecast.register_observer(temperature_display)
+weather_forecast.register_observer(humidity_display)
+weather_forecast.register_observer(wind_speed_display)
+
+# Update weather forecast data
+weather_forecast.update_data(25, 60, 10)
